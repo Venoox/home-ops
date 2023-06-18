@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./kubernetes/flux/vars
+  path: ./kubernetes/vars
   prune: true
   sourceRef:
     kind: GitRepository
