@@ -11,6 +11,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
+  dependsOn:
+    - name: vars
+    - name: repositories
   decryption:
     provider: sops
     secretRef:

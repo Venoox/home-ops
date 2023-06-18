@@ -52,6 +52,9 @@ spec:
         keep-alive-requests: 10000
         proxy-body-size: "100M"
         ssl-protocols: "TLSv1.3 TLSv1.2"
+        forwarded-for-header: "CF-Connecting-IP"
+        enable-real-ip: "true"
+        use-forwarded-headers: "true"
       metrics:
         enabled: true
         serviceMonitor:
@@ -68,4 +71,13 @@ spec:
         limits:
           memory: 500Mi
     defaultBackend:
-      enabled: false
+      enabled: true
+      image:
+        repository: ghcr.io/tarampampam/error-pages
+        tag: 2.24.0
+      replicaCount: 1
+      extraEnvs:
+        - name: TEMPLATE_NAME
+          value: lost-in-space
+        - name: SHOW_DETAILS
+          value: "false"
