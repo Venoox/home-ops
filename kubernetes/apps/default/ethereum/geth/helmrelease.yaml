@@ -45,7 +45,7 @@ spec:
       - "--ws.api=eth,net,web3,engine"
       - "--rpc.txfeecap=0"
       - "--rpc.gascap=0"
-      - "--rpc.evmtimeout=10"
+      - "--rpc.evmtimeout=10s"
     service:
       main:
         primary: true
