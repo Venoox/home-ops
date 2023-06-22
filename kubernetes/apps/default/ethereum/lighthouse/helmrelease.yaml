@@ -55,13 +55,13 @@ spec:
             procotol: TCP
             targetPort: 9000
             port: 9000
-            nodePort: 9000
+            nodePort: 30305
           discovery-udp:
             primary: false
             procotol: UDP
             targetPort: 9000
             port: 9001
-            nodePort: 9001
+            nodePort: 30306
     probes:
       liveness:
         enabled: false
