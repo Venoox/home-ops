@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-ethereum-geth
+  namespace: flux-system
+spec:
+  path: ./kubernetes/apps/default/ethereum/geth
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-kubernetes
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-ethereum-lighthouse
+  namespace: flux-system
+spec:
+  path: ./kubernetes/apps/default/ethereum/lighthouse
+  prune: true
+  dependsOn:
+    - name: cluster-apps-ethereum-geth
+  sourceRef:
+    kind: GitRepository
+    name: home-kubernetes
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m

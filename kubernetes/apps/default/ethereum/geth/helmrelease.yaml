@@ -1,0 +1,108 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: geth
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controller:
+      type: statefulset
+    image:
+      repository: ethereum/client-go
+      tag: stable
+    args:
+      - "--sepolia"
+      - "--syncmode=full"
+      - "--gcmode=archive"
+      - "--datadir=/root/.ethereum"
+      - "--http"
+      - "--http.api=eth,net,web3,engine"
+      - "--http.port=8545"
+      - "--authrpc.port=8551"
+      - "--ws"
+      - "--ws.port=8546"
+      - "--ws.api=eth,net,web3,engine"
+      - "--rpc.txfeecap=0"
+      - "--rpc.gascap=0"
+      - "--rpc.evmtimeout=10"
+    service:
+      main:
+        primary: true
+        ports:
+          http:
+            primary: true
+            port: 8545
+          ws:
+            primary: false
+            port: 8546
+          authrpc:
+            primary: false
+            port: 8551
+      p2p:
+        primary: false
+        type: NodePort
+        ports:
+          discovery-tcp:
+            primary: false
+            procotol: TCP
+            port: 30303
+            nodePort: 30303
+          discovery-udp:
+            primary: false
+            procotol: UDP
+            port: 30303
+            nodePort: 30303
+    probes:
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+      startup:
+        enabled: false
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          hajimari.io/icon: video-input-antenna
+        hosts:
+          - host: &host "geth.${SECRET_DOMAIN}"
+            paths:
+              - path: /http
+                pathType: Prefix
+                service:
+                  port: 8545
+              - path: /ws
+                pathType: Prefix
+                service:
+                  port: 8546
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        type: hostPath
+        hostPath: /mnt/data/ethereum/geth
+        mountPath: /root/.ethereum

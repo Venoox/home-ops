@@ -1,0 +1,95 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: lighthouse
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controller:
+      type: statefulset
+    image:
+      repository: sigp/lighthouse
+      tag: latest-modern
+    args:
+      - "lighthouse"
+      - "bn"
+      - "--network=sepolia"
+      - "--execution-endpoint=http://geth.default.svc.cluster.local:8551"
+      - "--execution-jwt=/root/.ethereum/geth/jwtsecret"
+      - "--http"
+      - "--disable-deposit-contract-sync"
+    service:
+      main:
+        primary: true
+        ports:
+          http:
+            primary: true
+            port: 5052
+      p2p:
+        primary: false
+        type: NodePort
+        ports:
+          discovery-tcp:
+            primary: false
+            procotol: TCP
+            port: 9000
+            nodePort: 9000
+          discovery-udp:
+            primary: false
+            procotol: UDP
+            port: 9000
+            nodePort: 9000
+    probes:
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+      startup:
+        enabled: false
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          hajimari.io/icon: video-input-antenna
+        hosts:
+          - host: &host "lighthouse.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        type: hostPath
+        hostPath: /mnt/data/ethereum/lighthouse
+        mountPath: /root/.lighthouse
+      jwt:
+        enabled: true
+        type: hostPath
+        hostPath: /mnt/data/ethereum/geth
+        mountPath: /root/.ethereum
+        readOnly: true
