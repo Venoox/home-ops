@@ -37,6 +37,7 @@ spec:
       - "--network=sepolia"
       - "--execution-endpoint=http://geth.default.svc.cluster.local:8551"
       - "--execution-jwt=/root/.ethereum/geth/jwtsecret"
+      - "--checkpoint-sync-url=https://beaconstate-sepolia.chainsafe.io"
       - "--http"
       - "--disable-deposit-contract-sync"
     service:
