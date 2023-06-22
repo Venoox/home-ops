@@ -53,12 +53,14 @@ spec:
           discovery-tcp:
             primary: false
             procotol: TCP
+            targetPort: 9000
             port: 9000
             nodePort: 9000
           discovery-udp:
             primary: false
             procotol: UDP
-            port: 9000
+            targetPort: 9000
+            port: 9001
             nodePort: 9001
     probes:
       liveness:
