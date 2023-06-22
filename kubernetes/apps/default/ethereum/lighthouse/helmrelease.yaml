@@ -59,7 +59,7 @@ spec:
             primary: false
             procotol: UDP
             port: 9000
-            nodePort: 9000
+            nodePort: 9001
     probes:
       liveness:
         enabled: false

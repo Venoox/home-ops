@@ -72,7 +72,7 @@ spec:
             primary: false
             procotol: UDP
             port: 30303
-            nodePort: 30303
+            nodePort: 30304
     probes:
       liveness:
         enabled: false
