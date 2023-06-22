@@ -63,12 +63,12 @@ spec:
         primary: false
         type: NodePort
         ports:
-          discovery-tcp:
+          protocol:
             primary: false
             procotol: TCP
             port: 30303
             nodePort: 30303
-          discovery-udp:
+          discovery:
             primary: false
             procotol: UDP
             port: 30303
