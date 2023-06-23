@@ -40,6 +40,7 @@ spec:
       - "--checkpoint-sync-url=https://beaconstate-sepolia.chainsafe.io"
       - "--http"
       - "--disable-deposit-contract-sync"
+      - "--disable-backfill-rate-limiting"
     service:
       main:
         primary: true
