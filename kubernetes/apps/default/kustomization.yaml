@@ -6,3 +6,8 @@ resources:
   - ./echo-server/ks.yaml
   - ./hajimari/ks.yaml
   - ./ethereum/ks.yaml
+  - ./jellyfin/ks.yaml
+  - qbittorrent
+  - radarr
+  - sonarr
+  - bazarr
