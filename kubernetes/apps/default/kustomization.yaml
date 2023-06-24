@@ -8,6 +8,6 @@ resources:
   - ./ethereum/ks.yaml
   - ./jellyfin/ks.yaml
   - qbittorrent
-  - radarr
-  - sonarr
+#  - radarr
+#  - sonarr
   - bazarr
