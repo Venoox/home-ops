@@ -37,7 +37,7 @@ spec:
       - "--gcmode=archive"
       - "--datadir=/root/.ethereum"
       - "--http"
-      - "--http.api=eth,net,web3,engine"
+      - "--http.api=eth,net,web3,engine,debug,txpool"
       - "--http.addr=0.0.0.0"
       - "--http.port=8545"
       - "--http.corsdomain=*"
