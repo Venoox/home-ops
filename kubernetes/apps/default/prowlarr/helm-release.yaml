@@ -65,7 +65,7 @@ spec:
       runAsGroup: 568
       fsGroup: 568
       fsGroupChangePolicy: "OnRootMismatch"
-    persistance:
+    persistence:
       config:
         enabled: true
         type: hostPath
