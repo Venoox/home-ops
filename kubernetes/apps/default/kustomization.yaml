@@ -12,3 +12,4 @@ resources:
   - sonarr
   - bazarr
   - prowlarr
+  - unifi-controlelr

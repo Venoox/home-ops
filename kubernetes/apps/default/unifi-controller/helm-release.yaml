@@ -1,0 +1,86 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app unifi-controller
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    controller:
+      type: statefulset
+    image:
+      repository: lscr.io/linuxserver/unifi-controller
+      tag: latest@sha256:1a5e5bb8053e79d70979de19a0e0ceac6fb682c7042070bdd33a02eca25407ae
+    env:
+      TZ: Europe/Ljubljana
+      PUID: 568
+      PGID: 568
+    service:
+      main:
+        primary: true
+        ports:
+          http:
+            primary: true
+            port: &port 8443
+      device-communication:
+        primary: false
+        type: NodePort
+        ports:
+          http:
+            primary: false
+            port: 8080 # service port
+            targetPort: 8080 # container port
+            nodePort: 31000
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          hajimari.io/icon: mdi:router-wireless
+          hajimari.io/enable: "true"
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+        hosts:
+          - host: &host "unifi.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
+    persistence:
+      config:
+        enabled: true
+        type: hostPath
+        mountPath: /config
+        hostPath: /mnt/data/unifi-controller/config
+    resources:
+      requests:
+        cpu: 10m
+        memory: 200Mi
+      limits:
+        memory: 2000Mi
