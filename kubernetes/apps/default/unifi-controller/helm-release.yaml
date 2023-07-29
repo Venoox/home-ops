@@ -50,21 +50,25 @@ spec:
             primary: false
             port: 8080 # service port
             targetPort: 8080 # container port
+            nodePort: 8080
             protocol: TCP
           discovery:
             primary: false
             port: 10001
             targetPort: 10001
+            nodePort: 10001
             protocol: UDP
           disocvery-l2:
             primary: false
             port: 1900
             targetPort: 1900
+            nodePort: 1900
             protocol: UDP
           stun:
             primary: false
             port: 3478
             targetPort: 3478
+            nodePort: 3478
             protocol: UDP
     ingress:
       main:
