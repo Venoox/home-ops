@@ -39,15 +39,33 @@ spec:
           http:
             primary: true
             port: &port 8443
-      device-communication:
+      other:
         primary: false
-        type: NodePort
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/loadBalancerIPs: 192.168.30.203
+        externalTrafficPolicy: Local
         ports:
           device:
             primary: false
             port: 8080 # service port
             targetPort: 8080 # container port
-            nodePort: 31000
+            protocol: TCP
+          discovery:
+            primary: false
+            port: 10001
+            targetPort: 10001
+            protocol: UDP
+          disocvery-l2:
+            primary: false
+            port: 1900
+            targetPort: 1900
+            protocol: UDP
+          stun:
+            primary: false
+            port: 3478
+            targetPort: 3478
+            protocol: UDP
     ingress:
       main:
         enabled: true
