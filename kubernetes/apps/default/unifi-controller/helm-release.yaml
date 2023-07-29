@@ -43,7 +43,7 @@ spec:
         primary: false
         type: NodePort
         ports:
-          device-communication:
+          device:
             primary: false
             port: 8080 # service port
             targetPort: 8080 # container port
