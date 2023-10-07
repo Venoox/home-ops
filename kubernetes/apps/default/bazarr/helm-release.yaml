@@ -27,7 +27,7 @@ spec:
       type: statefulset
     image:
       repository: ghcr.io/onedr0p/bazarr
-      tag: rolling@sha256:b92631a965af1a73a3f8dd4f792fafa52e36bee3e2749daef062ee66073f1ffa
+      tag: rolling@sha256:4288116550ca41cc4bed80ec4fc74e4113a1485dd96a86ce4b5e580fceb604b0
     env:
       TZ: Europe/Ljubljana
     service:
