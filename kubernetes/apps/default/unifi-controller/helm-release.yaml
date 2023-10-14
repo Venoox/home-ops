@@ -27,7 +27,7 @@ spec:
       type: statefulset
     image:
       repository: lscr.io/linuxserver/unifi-controller
-      tag: latest@sha256:5e3c0a6e301ad0a29668bdcdf92dcce0c5bde8ec77f1913c17bc67665f81e829
+      tag: latest@sha256:4a585546472dda0faa003764732fd98d544fa92ddb87a91afba4be38a0ed4eb4
     env:
       TZ: Europe/Ljubljana
       PUID: 568
